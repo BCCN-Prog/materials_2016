@@ -42,7 +42,11 @@ def create_new_user(username, password, salt, paswdb, pswdb_file):
         write_pswdb(pswdb, pswdb_file)
 
 def create_individual_salt():
-    return chr(int.from_bytes(os.urandom(1), 'little'))
+    # make a longer salt
+    salt = ''
+    for i in range(1,10):
+        salt = salt + chr(int.from_bytes(os.urandom(1), 'little'))
+    return salt
 
 try:
     pswdb_file = open('pswdb', 'rb+')
