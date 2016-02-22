@@ -1,4 +1,5 @@
 import pickle
+import os
 from getpass import getpass
 
 def read_pswdb(pswdb_file):
@@ -17,26 +18,31 @@ def get_credentials():
     password = getpass('Enter your password: ')
     return (username, password)
 
-def authorize(username, password, pswdb):
+def authorize(username, pass_text, pswdb):
     #print(username, password)
     if username in pswdb:
-        if pwhash(password) == pswdb[username]:
+        salt = pswdb[username][1]
+        if pwhash(pass_text, salt) == pswdb[username][0]:
             return True
     #print(pswdb)
     return False
 
-def pwhash(password):
+def pwhash(pass_text, salt):
     hash_ = 0
-    for idx, char in enumerate(password):
+    full_pass_text = pass_text + salt
+    for idx, char in enumerate(full_pass_text):
         hash_ += (idx+1)*ord(char)
     return hash_
 
-def create_new_user(username, password, paswdb, pswdb_file):
+def create_new_user(username, password, salt, paswdb, pswdb_file):
     if username in pswdb:
         raise Exception('Unsername already exists [%s]' %username)
     else:
-        pswdb[username] = pwhash(password)
+        pswdb[username] = (pwhash(password,salt), salt)
         write_pswdb(pswdb, pswdb_file)
+
+def create_individual_salt():
+    return chr(int.from_bytes(os.urandom(1), 'little'))
 
 try:
     pswdb_file = open('pswdb', 'rb+')
@@ -52,7 +58,8 @@ else:
     print('Wrong username or password')
     ans = input('Create new user [y/n]? ')
     if ans == 'y':
-        create_new_user(username, password, pswdb, pswdb_file)
+        salt = create_individual_salt()
+        create_new_user(username, password, salt, pswdb, pswdb_file)
     else:
         print('Exit!')
 
