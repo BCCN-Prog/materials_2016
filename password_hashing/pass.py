@@ -1,9 +1,11 @@
 import pickle
+import os
 from getpass import getpass
 
 def read_pswdb(pswdb_file):
     try:
         pswdb = pickle.load(pswdb_file)
+        pswdb_file.seek(0)
     except EOFError:
         pswdb = {}
     return pswdb
@@ -16,20 +18,38 @@ def get_credentials():
     password = getpass('Enter your password: ')
     return (username, password)
 
-def authorize(username, password, pswdb):
-    print(username, password)
+def authorize(username, pass_text, pswdb):
     if username in pswdb:
-        if password == pswdb[username]:
+        salt = pswdb[username][1]
+        if pwhash(pass_text, salt) == pswdb[username][0]:
             return True
-    print(pswdb)
     return False
 
-def create_new_user(username, password, pswdb, pswdb_file):
-    pswdb[username] = password
-    write_pswdb(pswdb, pswdb_file)
+def pwhash(pass_text, salt):
+    hash_ = 0
+    full_pass_text = pass_text + salt
+    for idx, char in enumerate(full_pass_text):
+        hash_ += (idx+1)*ord(char)
+    return hash_
 
-pswdb_file = open('pswdb', 'rb+')
+def create_new_user(username, password, salt, paswdb, pswdb_file):
+    if username in pswdb:
+        raise Exception('Unsername already exists [%s]' %username)
+    else:
+        pswdb[username] = (pwhash(password,salt), salt)
+        write_pswdb(pswdb, pswdb_file)
 
+def create_individual_salt():
+    # make a longer salt
+    salt = ''
+    for _ in range(10):
+        salt += chr(int.from_bytes(os.urandom(2), 'little'))
+    return salt
+
+try:
+    pswdb_file = open('pswdb', 'rb+')
+except FileNotFoundError:
+    pswdb_file = open('pswdb', 'wb+')
 
 username, password = get_credentials()
 pswdb = read_pswdb(pswdb_file)
@@ -37,6 +57,12 @@ pswdb = read_pswdb(pswdb_file)
 if authorize(username, password, pswdb):
     print('Authorization succeeded!')
 else:
-    create_new_user(username, password, pswdb, pswdb_file)
-    print('Wrong username or password. Added to the database!')
+    print('Wrong username or password')
+    ans = input('Create new user [y/n]? ')
+    if ans == 'y':
+        salt = create_individual_salt()
+        create_new_user(username, password, salt, pswdb, pswdb_file)
+    else:
+        print('Exit!')
 
+print(pswdb)
