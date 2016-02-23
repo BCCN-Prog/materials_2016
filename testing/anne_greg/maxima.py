@@ -28,12 +28,12 @@ def find_maxima(x):
            if x[i-1] < x[i]:
               if i == len(x)-1:
                  idx.append(i)
-              elif x[i+1] < x[i]:
+              elif x[i+1] <= x[i]:
                  idx.append(i)
         else:
             if i == len(x)-1:
                 idx.append(i)
-            elif x[i+1] < x[i]:
+            elif x[i+1] <= x[i]:
                 idx.append(i)
     return idx
 
