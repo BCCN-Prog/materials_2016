@@ -6,3 +6,9 @@ def test_simple_sequence():
     output = find_maxima(x)
     assert output == expected
 
+def test_shorter_sequence():
+    x = [1,2,3]
+    exp = [2]
+    out = find_maxima(x)
+    assert out == exp, 'expected {}, but got {}'.format(exp, out)
+
