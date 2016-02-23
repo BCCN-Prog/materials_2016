@@ -1,0 +1,6 @@
+TESTING:
+nosetest 
+
+DEBUGGING:
+python -m pdb test_maxima.py
+nosetest --pdb

@@ -1,0 +1,5 @@
+PROFILING:
+python -m cProfile -o heavy_calc.prof heavy_calc.py
+
+VISUALISATION:
+snakeviz heavy_calc.prof
