@@ -1,7 +1,6 @@
 # Advanced Scientific Programming in Python
 # Exercise 3
 
-
 def find_maxima(x):
     """Find local maxima of x.
 
@@ -22,10 +21,18 @@ def find_maxima(x):
         raise TypeError(message)
 
     idx = []
-    for i in range(len(x)):
-        # `i` is a local maximum if the signal decreases before and after it
-        if x[i-1] < x[i] and x[i+1] < x[i]:
+    up, down = False, False
+
+    for i in range(len(x)-1):
+        #import pdb; pdb.set_trace()
+        if i == 0 or x[i-1] < x[i]:
+            up = True
+        if up and x[i] > x[i+1]:
+            down = True
+
+        if up and down:
             idx.append(i)
+            up, down = False, False
     return idx
 
     # NOTE for the curious: the code above could be written using
