@@ -45,5 +45,5 @@ def test_neighbors5():
 def test_equal_beginning():
     x = [2, 2, 1, 2]
     out = find_maxima(x)
-    exp = [0, 4]
-    assert exp == out            
+    exp = [0, 3]
+    assert exp == out
