@@ -1,6 +1,3 @@
-# Advanced Scientific Programming in Python
-# Exercise 3
-
 def find_maxima(x):
     """Find local maxima of x.
 
