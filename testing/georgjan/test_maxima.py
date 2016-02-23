@@ -16,3 +16,9 @@ def test_neighbors():
     out = find_maxima(x)
     exp = [1]
     assert exp == out
+
+def test_neighbors2():
+    x = [1, 2, 2, 3, 1]
+    out = find_maxima(x)
+    exp = [3]
+    assert exp == out
