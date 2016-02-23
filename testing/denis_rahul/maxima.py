@@ -23,12 +23,18 @@ def find_maxima(x):
         raise TypeError(message)
 
     idx = []
+    deriv_pos = None
     if x[0] > x[1]: idx.append(0)
     for i in range(1,len(x)-1):
         # `i` is a local maximum if the signal decreases before and after it
-        if x[i-1] <= x[i] and x[i+1] < x[i]:
+        if x[i-1] < x[i]:
+            deriv_pos = True
+        if x[i-1] <= x[i] and x[i+1] < x[i] and deriv_pos:
             idx.append(i)
-    if x[-1] > x[-2]: idx.append(len(x)-1)
+            deriv_pos = False
+    if x[-1] > x[-2]:
+        deriv_pos = True
+    if x[-1] >= x[-2] and deriv_pos: idx.append(len(x)-1)
     return idx
 
     # NOTE for the curious: the code above could be written using

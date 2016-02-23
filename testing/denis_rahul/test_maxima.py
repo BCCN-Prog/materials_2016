@@ -55,3 +55,29 @@ def test_9():
     exp = [2]
     out = find_maxima(x)
     assert out == exp, 'expected {}, but got {}'.format(exp, out)
+
+def test_10():
+    x = [1, 2, 2, 3, 1]
+    exp = [3]
+    out = find_maxima(x)
+    assert out == exp, 'expected {}, but got {}'.format(exp, out)
+
+def test_11():
+    x = [1, 3, 2, 2, 1]
+    exp = [1]
+    out = find_maxima(x)
+    assert out == exp, 'expected {}, but got {}'.format(exp, out)
+
+def test_12():
+    x = [3, 2, 2, 3]
+    exp = [0,3]
+    out = find_maxima(x)
+    assert out == exp, 'expected {}, but got {}'.format(exp, out)
+
+def test_13():
+    x = [1,3,2,4,4]
+    exp = [1,4]
+    out = find_maxima(x)
+    assert out == exp, 'expected {}, but got {}'.format(exp, out)
+
+
