@@ -1,13 +1,13 @@
 from maxima import find_maxima
 import numpy as np
 
-def test_simple_sequence():
+def test_1():
     exp = [2,4]
     x = [1,2,3,2,4,3]
     out = find_maxima(x)
     assert out == exp, 'expected {}, but got {}'.format(exp, out)
 
-def test_shorter_sequence():
+def test_2():
     x = [1,2,3]
     exp = [2]
     out = find_maxima(x)
@@ -80,4 +80,8 @@ def test_13():
     out = find_maxima(x)
     assert out == exp, 'expected {}, but got {}'.format(exp, out)
 
-
+def test_14():
+    x = [1,1,1,3,2,4,4]
+    exp = [3,6]
+    out = find_maxima(x)
+    assert out == exp, 'expected {}, but got {}'.format(exp, out)
