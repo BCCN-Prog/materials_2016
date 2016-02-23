@@ -24,7 +24,6 @@ def find_maxima(x):
     up, down, equal = False, False, False
 
     for i in range(len(x)):
-        #import pdb; pdb.set_trace()
         if i == 0 or x[i-1] < x[i]:
             up = True
         if i==(len(x)-1) or x[i] > x[i+1]:
