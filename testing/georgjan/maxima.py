@@ -28,7 +28,7 @@ def find_maxima(x):
             if x[0]>x[1]:
                 idx.append()
         elif i < (len(x)-1):
-            if x[i-1] < x[i] and x[i+1] < x[i]:
+            if x[i-1] < x[i] and x[i+1] <= x[i]:
                 idx.append(i)
         else:
             if x[i]>x[i-1]:
