@@ -49,6 +49,7 @@ def find_maxima(x):
     maxima = (np.array(check_maxima(d, negative_indices)) -1).tolist()
     # maxima = (maxima - 1).tolist()
     if d[-1] > 0:
+        #pdb.set_trace()
         maxima.append(len(x)-1)
     if d[1] < 0:
         maxima.append(0)
