@@ -1,7 +1,7 @@
 def f(x):
-    long_ = range(10**x)
+    long = range(10**x)
     y = []
-    for idx in long_:
+    for idx in long:
         #y.extend([idx*2])
         y = [idx]
     return y
