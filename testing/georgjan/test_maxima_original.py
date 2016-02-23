@@ -29,3 +29,21 @@ def test_neighbors3():
     out = find_maxima(x)
     exp = [0, 3]
     assert exp == out
+
+def test_neighbors4():
+    x = [1, 3, 2, 2, 1]
+    out = find_maxima(x)
+    exp = [1]
+    assert exp == out
+
+def test_neighbors5():
+    x = [3, 2, 2, 1, 2]
+    out = find_maxima(x)
+    exp = [0, 4]
+    assert exp == out
+
+def test_equal_beginning():
+    x = [2, 2, 1, 2]
+    out = find_maxima(x)
+    exp = [0, 3]
+    assert exp == out
