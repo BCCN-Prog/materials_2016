@@ -11,3 +11,9 @@ def test_short_sequence():
     out = find_maxima(x)
     exp = [2]
     assert exp == out
+
+def test_neighbors():
+    x = [1, 2, 2, 1]
+    out = find_maxima(x)
+    exp = [1]
+    assert exp == out    

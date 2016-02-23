@@ -21,17 +21,22 @@ def find_maxima(x):
         raise TypeError(message)
 
     idx = []
-    up, down = False, False
+    up, down, equal = False, False, False
 
-    for i in range(len(x)-1):
+    for i in range(len(x)):
         #import pdb; pdb.set_trace()
         if i == 0 or x[i-1] < x[i]:
             up = True
-        if up and x[i] > x[i+1]:
+        if i==(len(x)-1) or x[i] > x[i+1]:
             down = True
+            equal = x[i]==x[i-1]
 
         if up and down:
-            idx.append(i)
+            if equal:
+                idx.append(i-1)
+                equal = False
+            else:
+                idx.append(i)
             up, down = False, False
     return idx
 
