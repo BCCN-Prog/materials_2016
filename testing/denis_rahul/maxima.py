@@ -23,12 +23,12 @@ def find_maxima(x):
 
     idx = []
     if x[0] > x[1]: idx.append(0)
-    if x[-1] > x[-2]: idx.append(len(x)-1)
     for i in range(1,len(x)-1):
         # `i` is a local maximum if the signal decreases before and after it
         if x[i-1] < x[i] and x[i+1] < x[i]:
             idx.append(i)
-    return sorted(idx)
+    if x[-1] > x[-2]: idx.append(len(x)-1)
+    return idx
 
     # NOTE for the curious: the code above could be written using
     # list comprehension as
