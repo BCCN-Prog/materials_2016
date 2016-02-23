@@ -2,7 +2,8 @@ def f(x):
     long_ = range(10**x)
     y = []
     for idx in long_:
-        y.extend([idx*2])
+        #y.extend([idx*2])
+        pass
     return y
 
 def g(y):
