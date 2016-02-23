@@ -14,7 +14,8 @@ def find_maxima(x):
     x -- 1D list of real numbers
 
     Output:
-    idx -- list of indices of the local maxima in x
+    idx -- list of indices of the local maxima in x, 
+           if there is a maximum plateau, the last indice is returned.
     """
 
     if type(x) != type([]):
@@ -25,7 +26,7 @@ def find_maxima(x):
     if x[0] > x[1]: idx.append(0)
     for i in range(1,len(x)-1):
         # `i` is a local maximum if the signal decreases before and after it
-        if x[i-1] < x[i] and x[i+1] < x[i]:
+        if x[i-1] <= x[i] and x[i+1] < x[i]:
             idx.append(i)
     if x[-1] > x[-2]: idx.append(len(x)-1)
     return idx
