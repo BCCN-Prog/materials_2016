@@ -2,7 +2,7 @@ def f(x):
     long_ = range(10**x)
     y = []
     for idx in long_:
-        y.append(idx*2)
+        y.extend([idx*2])
     return y
 
 def g(y):
@@ -14,3 +14,4 @@ def g(y):
 pow = 7
 
 a = g(pow)
+#print(a)
