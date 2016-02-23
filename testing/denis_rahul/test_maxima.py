@@ -2,10 +2,10 @@ from maxima import find_maxima
 import numpy as np
 
 def test_simple_sequence():
-    expected = [2,4]
+    exp = [2,4]
     x = [1,2,3,2,4,3]
-    output = find_maxima(x)
-    assert output == expected
+    out = find_maxima(x)
+    assert out == exp, 'expected {}, but got {}'.format(exp, out)
 
 def test_shorter_sequence():
     x = [1,2,3]
@@ -23,13 +23,13 @@ def test_4():
     x = [-i**2 for i in range(-3, 4)]
     exp = [3]
     out = find_maxima(x)
-    assert out == exp
+    assert out == exp, 'expected {}, but got {}'.format(exp, out)
 
 def test_5():
     x = [np.sin(2*alpha) for alpha in np.linspace(0.0, 5.0, 100)]
     exp = [16, 78]
     out = find_maxima(x)
-    assert out == exp
+    assert out == exp, 'expected {}, but got {}'.format(exp, out)
 
 
 def test_6():
@@ -41,5 +41,11 @@ def test_6():
 def test_7():
     x = [4, 2, 1, 3, 1, 5]
     exp = [0, 3, 5]
+    out = find_maxima(x)
+    assert out == exp, 'expected {}, but got {}'.format(exp, out)
+
+def test_8():
+    x = [4, 2, 1, 3, 1]
+    exp = [0, 3]
     out = find_maxima(x)
     assert out == exp, 'expected {}, but got {}'.format(exp, out)
