@@ -29,7 +29,7 @@ def find_maxima(x):
             up = True
         if i==(len(x)-1) or x[i] > x[i+1]:
             down = True
-            equal = x[i]==x[i-1]
+            equal = x[i]==x[i-1] and i>0
 
         if up and down:
             if equal:
