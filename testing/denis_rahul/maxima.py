@@ -28,7 +28,7 @@ def find_maxima(x):
         # `i` is a local maximum if the signal decreases before and after it
         if x[i-1] < x[i] and x[i+1] < x[i]:
             idx.append(i)
-    return idx
+    return sorted(idx)
 
     # NOTE for the curious: the code above could be written using
     # list comprehension as
