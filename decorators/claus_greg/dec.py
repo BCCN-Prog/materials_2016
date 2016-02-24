@@ -1,8 +1,14 @@
 import functools
 
 def deprecated(func):
+    # if not hasattr(deprecated, 'dict'):
+        # deprecated.dict={}
+    # deprecated.dict[func.__name__]=False
     func._seen = False
     def newfunc(*args, **kwargs):
+        # if not deprecated.dict[func.__name__]:
+            # print('This function is deprecated')
+            # deprecated.dict[func.__name__] = True
         if not func._seen:
             print('This function is deprecated')
             func._seen = True
@@ -45,7 +51,8 @@ def test_very_special_case():
     assert exp == out
 
 for i in range(10):
-    print(power(i,2))
-    print(add(i,i,i))
+    print(power(i, 2))
+    print(add(i, i, i))
+
 
 print(power.__doc__)
