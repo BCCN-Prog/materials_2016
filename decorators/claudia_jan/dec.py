@@ -6,14 +6,14 @@ def deprecate(func, instead): # this is called only once
     def newfunc(*args, **kwargs):
         if not func._called:
             func._called = True
-            print('This function is deprecated, use' + instead +' instead')
+            print('This function is deprecated, use ' + instead)
         return func(*args, **kwargs)
     # uses doc, name, and signature of original function see
     # documentation of update_wrapper
     return functools.update_wrapper(newfunc, func)
 
 # do namechange to pass argument to decorator.
-def deprecated(instead):
+def deprecated(instead = 'None'):
     # partial calls function with additional arguments
     return functools.partial(deprecate, instead=instead)
 
@@ -27,7 +27,7 @@ def power(x, n=1):
         y = y*x
     return y
 
-@deprecated('math.add')
+@deprecated()
 def add(x, y, z):
     return x + y + z
 
