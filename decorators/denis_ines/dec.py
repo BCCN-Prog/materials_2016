@@ -1,13 +1,13 @@
-from functools import update_wrapper
+from functools import wraps
 
 def deprecated(func):
     func._seen = False
+    @wraps(func)
     def newfunc(*args, **kwargs):
         if not func._seen:
             print('This function is deprecated')
             func._seen = True
         return func(*args, **kwargs)
-    update_wrapper(newfunc, func)
     return newfunc
 
 @deprecated

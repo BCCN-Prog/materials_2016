@@ -1,21 +1,18 @@
-power_flag = True
-add_flag = True
+import functools
+
 
 def deprecated(func):
-    def newfunc1(*args, **kwargs):
-        global power_flag
-        if power_flag:
-            print('Power function is deprecated')
-            power_flag = False
+    func._seen = False
+
+    def newfunc(*args, **kwargs):
+        if not func._seen:
+            print('This function is deprecated')
+            func._seen = True
         return func(*args, **kwargs)
 
-    def newfunc2(*args, **kwargs):
-        global add_flag
-        if add_flag:
-            print('Add function is deprecated')
-            add_flag = False
-        return func(*args, **kwargs)
-    return newfunc1 if func.__name__ == "power" else newfunc2
+    functools.update_wrapper(newfunc, func)
+
+    return newfunc
 
 
 @deprecated
@@ -27,6 +24,7 @@ def power(x, n=1):
     for i in range(n - 1):
         y = y * x
     return y
+
 
 @deprecated
 def add(x, y):
@@ -42,9 +40,10 @@ def test_power():
         out = power(x, n=pow_)
         assert out == exp
 
+
 def test_add():
-    x = [1,2,3]
-    y = [4,5,6]
+    x = [1, 2, 3]
+    y = [4, 5, 6]
     for i, j in zip(x, y):
         add(i, j)
 
@@ -62,5 +61,9 @@ def test_very_special_case():
     out = power(0, n=0)
     assert exp == out
 
-test_power()
-test_add()
+
+# test_power()
+# test_add()
+# power(5,5)
+print power.__doc__
+print power.__name__
