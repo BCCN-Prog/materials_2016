@@ -1,13 +1,18 @@
-def deprecated(func):
-    func._seen = False # underscore means do not touch (convention)
-    def newfunc(*args, **kwargs): # *args: positional args; **kwargs: keyword (=named) args
-        if not func._seen
-            print('This function is deprecated.')
-            func._seen = True
-        return func(*args, **kwargs)
-    return newfunc
+from functools import update_wrapper
+
+def deprecated2(arg): # decorator
+    def deprecated(func):
+        func._seen = False # underscore means do not touch (convention)
+        def newfunc(*args, **kwargs): # *args: positional args; **kwargs: keyword (=named) args
+            if not func._seen:
+                print('This function is deprecated. Use %s instead.' %arg)
+                func._seen = True
+            return func(*args, **kwargs)
+        update_wrapper(newfunc, func)
+        return newfunc
+    return deprecated
     
-@deprecated # decorator
+@deprecated2('math.pow')
 def power(x, n = 1):
     """return x^n (for natural numbers only)"""
     y = x
@@ -16,6 +21,10 @@ def power(x, n = 1):
     for i in range(n-1):
         y = y*x
     return y
+
+@deprecated2('add2')
+def add(x,y,z):
+    return x+y+z
 
 def test_power():
     x = 10

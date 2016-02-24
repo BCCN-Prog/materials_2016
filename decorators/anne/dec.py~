@@ -1,6 +1,6 @@
 from functools import update_wrapper
 
-def deprecated2(arg): # decorator
+def deprecated2(arg):
     def deprecated(func):
         func._seen = False # underscore means do not touch (convention)
         def newfunc(*args, **kwargs): # *args: positional args; **kwargs: keyword (=named) args
@@ -12,7 +12,7 @@ def deprecated2(arg): # decorator
         return newfunc
     return deprecated
     
-@deprecated2('math.pow')
+@deprecated2('math.pow') # decorator
 def power(x, n = 1):
     """return x^n (for natural numbers only)"""
     y = x
