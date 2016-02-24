@@ -4,7 +4,7 @@ import functools
 def deprecated(str):
     def deprecated_aux(func):
         func._seen = False
-        
+
         # @functools.wraps(func)
         def newfunc(*args, **kwargs):
             if not func._seen:
