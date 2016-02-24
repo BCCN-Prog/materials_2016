@@ -1,13 +1,16 @@
+from functools import update_wrapper
+
 def deprecated(func): # this is called only once
+    # thats why setting to false here does not effect the additional function calls
     func._called = False
     def newfunc(*args, **kwargs):
         if not func._called:
             func._called = True
             print('This function is deprecated')
         return func(*args, **kwargs)
-    newfunc.__doc__ = func.__doc__
-    newfunc.__name__ = func.__name__
-    return newfunc
+    # uses doc, name, and signature of original function see
+    # documentation of update_wrapper
+    return update_wrapper(newfunc, func)
 
 @deprecated
 def power(x, n=1):
