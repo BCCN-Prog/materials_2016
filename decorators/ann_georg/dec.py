@@ -1,4 +1,9 @@
 from functools import update_wrapper
+import numpy as np
+import hashlib as hl
+import pickle
+
+#hl.md5(bal).hashdigest()
 
 def deprecated2(arg): # decorator
     def deprecated(func):
@@ -11,7 +16,29 @@ def deprecated2(arg): # decorator
         update_wrapper(newfunc, func)
         return newfunc
     return deprecated
-    
+   
+pre = []
+results = []
+def cache(func):
+    #pre = []
+    #results = []
+    def newfunc(*args, **kwargs):
+        n = func.__name__
+        t = (n, args, kwargs)
+        t = pickle.dumps(t)
+        has = hl.md5(t).hexdigest()
+        global pre
+        global results
+        if has in pre:
+            i = pre.index(has)
+            return results[i]
+        else: 
+            pre.append(has)
+            result = func(*args, **kwargs)
+            results.append(result)
+            return result
+    return newfunc
+   
 @deprecated2('math.pow')
 def power(x, n = 1):
     """return x^n (for natural numbers only)"""
@@ -22,9 +49,18 @@ def power(x, n = 1):
         y = y*x
     return y
 
-@deprecated2('add2')
+@cache
 def add(x,y,z):
     return x+y+z
+
+@cache    
+def addv(x, y,z=1):
+    assert type(x) == type(y)
+    if type(x) is not np.array:
+        return x+y+z
+    else:
+        p = np.ones(x.shape[0])*z
+    return x+y+p
 
 def test_power():
     x = 10
