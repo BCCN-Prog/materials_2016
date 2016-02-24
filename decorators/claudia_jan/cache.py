@@ -1,13 +1,19 @@
 import functools
+import pickle
 
 def cache(func): # this is called only once
     func._cache = {}
     def newfunc(*args, **kwargs):
-        sig = (args, kwargs)
-        if sig not in func._cache:
+        key = hash(pickle.dumps([args, kwargs.items]))
+        if key not in func._cache:
+            try:
+                func._cache[key] = func(*args, **kwargs)
+            except TypeError:
+                print('TypeError')
+                return func(*args, **kwargs)
+        else:
             print('Used cache :)')
-            func._cache[sig] = func(*args, **kwargs)
-        return func._cache[sig]
+        return func._cache[key]
     return functools.update_wrapper(newfunc, func)
 
 @cache
