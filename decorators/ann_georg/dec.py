@@ -2,6 +2,7 @@ from functools import update_wrapper
 import numpy as np
 import hashlib as hl
 import pickle
+import os
 
 #hl.md5(bal).hashdigest()
 
@@ -19,9 +20,7 @@ def deprecated2(arg): # decorator
    
 pre = []
 results = []
-def cache(func):
-    #pre = []
-    #results = []
+def cache(func): # original working version of cache, does not save to disk
     def newfunc(*args, **kwargs):
         n = func.__name__
         t = (n, args, kwargs)
@@ -38,7 +37,78 @@ def cache(func):
             results.append(result)
             return result
     return newfunc
-   
+    
+def cache2(func): # cache version 2, saves to disk
+    def newfunc(*args, **kwargs):
+        n = func.__name__
+        t = (n, args, kwargs)
+        t = pickle.dumps(t)
+        has = hl.md5(t).hexdigest()
+        global pre
+        global results
+        loadFromDisk()
+        if has in pre:
+            i = pre.index(has)
+            print('cache')
+            return results[i]
+        else: 
+            pre.append(has)
+            result = func(*args, **kwargs)
+            results.append(result)
+            saveToDisk()
+            print('no cache')
+            return result
+    return newfunc
+
+def saveToDisk():
+    f = open('cache', 'wb')
+    global pre
+    global results
+    pickle.dump((pre, results), f)
+    f.close()
+    
+def loadFromDisk():
+    f = open('cache', 'rb+')
+    global pre
+    global results
+    try:
+        pic = pickle.load(f)
+    except EOFError:
+        return
+    pre = pic[0]
+    results = pic[1]
+    f.close()
+    
+    
+def cachedisk(func): # does not work
+    def newfunc(*args, **kwargs):
+        f = open('cache', 'rb+')
+        n = func.__name__
+        t = (n, args, kwargs)
+        t = pickle.dumps(t)
+        has = hl.md5(t).hexdigest()       
+        resultSaved = False
+        try:
+            f.seek(0)
+            for l in f:
+                print("asd")
+                tup = pickle.load(f)
+                print(tup)
+                if tup[0] == has:
+                    print('asd')                
+                    resultSaved = True
+                    f.close()
+                    print('yes')
+                    return tup[1]
+        except EOFError:
+            pass
+        if not resultSaved:
+            result = func(*args, **kwargs)
+            pickle.dump((has, result), f) 
+            f.close()
+            return result
+    return newfunc
+
 @deprecated2('math.pow')
 def power(x, n = 1):
     """return x^n (for natural numbers only)"""
@@ -53,7 +123,7 @@ def power(x, n = 1):
 def add(x,y,z):
     return x+y+z
 
-@cache    
+@cache2   
 def addv(x, y,z=1):
     assert type(x) == type(y)
     if type(x) is not np.array:
