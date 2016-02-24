@@ -1,18 +1,23 @@
-from functools import update_wrapper
+import functools
 
-def deprecated(func): # this is called only once
+def deprecate(func, instead): # this is called only once
     # thats why setting to false here does not effect the additional function calls
     func._called = False
     def newfunc(*args, **kwargs):
         if not func._called:
             func._called = True
-            print('This function is deprecated')
+            print('This function is deprecated, use' + instead +' instead')
         return func(*args, **kwargs)
     # uses doc, name, and signature of original function see
     # documentation of update_wrapper
-    return update_wrapper(newfunc, func)
+    return functools.update_wrapper(newfunc, func)
 
-@deprecated
+# do namechange to pass argument to decorator.
+def deprecated(instead):
+    # partial calls function with additional arguments
+    return functools.partial(deprecate, instead=instead)
+
+@deprecated('math.power')
 def power(x, n=1):
     """Return x^n (for natural numbers only!)"""
     y = x
@@ -22,7 +27,7 @@ def power(x, n=1):
         y = y*x
     return y
 
-@deprecated
+@deprecated('math.add')
 def add(x, y, z):
     return x + y + z
 
