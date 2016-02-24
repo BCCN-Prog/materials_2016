@@ -21,19 +21,23 @@ def find_maxima(x):
         raise TypeError(message)
 
     idx = []
-    up, down, equal = False, False, False
+    up, down= False, False
+    upidx = -1
 
     for i in range(len(x)):
         if i == 0 or x[i-1] < x[i]:
             up = True
+            if upidx<0:
+                upidx = i
+
         if i==(len(x)-1) or x[i] > x[i+1]:
             down = True
-            equal = x[i]==x[i-1] and i>0
+            upidx = -1
 
         if up and down:
-            if equal:
-                idx.append(i-1)
-                equal = False
+            if upidx>=0:
+                idx.append(upidx)
+                upidx = -1
             else:
                 idx.append(i)
             up, down = False, False
