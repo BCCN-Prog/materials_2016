@@ -1,18 +1,16 @@
-import functools
+from functools import wraps
 
-def deprecate(func, instead):
+def deprecated(func):
     func._seen = False
+    @wraps(func)
     def newfunc(*args, **kwargs):
         if not func._seen:
-            print('This function is deprecated. Use %s instead!'%instead)
+            print('This function is deprecated')
             func._seen = True
         return func(*args, **kwargs)
-    return functools.update_wrapper(newfunc, func)
+    return newfunc
 
-def deprecated(instead='None'):
-    return functools.partial(deprecate, instead=instead)
-
-@deprecated()
+@deprecated
 def power(x, n=1):
     """Return x^n (for natural numbers only!)"""
     y = x
@@ -22,7 +20,7 @@ def power(x, n=1):
         y = y*x
     return y
 
-@deprecated('+')
+@deprecated
 def add(x, y, z):
     return x + y + z
 
@@ -45,3 +43,9 @@ def test_very_special_case():
     exp = 1
     out = power(0, n=0)
     assert exp == out
+    
+#print (power (3,2))
+#print (power (3,3))
+
+
+    
