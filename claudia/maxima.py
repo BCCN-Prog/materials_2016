@@ -1,6 +1,5 @@
 # Advanced Scientific Programming in Python
 # Exercise 3
-import pudb; pu.db
 
 def find_maxima(x):
     """Find local maxima of x.
@@ -24,7 +23,6 @@ def find_maxima(x):
     idx = []
     for i in range(len(x)):
         # `i` is a local maximum if the signal decreases before and after it
-        #pdb.set_trace() # break point
         if x[i-1] < x[i] and x[i+1] < x[i]:
             idx.append(i)
     return idx
