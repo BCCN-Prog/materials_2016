@@ -1,22 +1,26 @@
 import functools
+# import pudb; pu.db
 
-def deprecated(func):
-    # if not hasattr(deprecated, 'dict'):
-        # deprecated.dict={}
-    # deprecated.dict[func.__name__]=False
-    func._seen = False
-    def newfunc(*args, **kwargs):
-        # if not deprecated.dict[func.__name__]:
-            # print('This function is deprecated')
-            # deprecated.dict[func.__name__] = True
-        if not func._seen:
-            print('This function is deprecated')
-            func._seen = True
-        return func(*args, **kwargs)
-    functools.update_wrapper(newfunc, func)
-    return newfunc
+def deprecated(tag):
+    def dec(func):
+        # if not hasattr(deprecated, 'dict'):
+            # deprecated.dict={}
+        # deprecated.dict[func.__name__]=False
+        func._seen = False
 
-@deprecated
+        def newfunc(*args, **kwargs):
+            # if not deprecated.dict[func.__name__]:
+                # print('This function is deprecated')
+                # deprecated.dict[func.__name__] = True
+            if not func._seen:
+                print('This function is deprecated. Use {} instead'.format(tag))
+                func._seen = True
+            return func(*args, **kwargs)
+        functools.update_wrapper(newfunc, func)
+        return newfunc
+    return dec
+
+@deprecated('math.pow()')
 def power(x, n=1):
     """Return x^n (for natural numbers only!)"""
     y = x
@@ -26,7 +30,7 @@ def power(x, n=1):
         y = y*x
     return y
 
-@deprecated
+@deprecated('+')
 def add(x, y, z):
     return x + y + z
 
@@ -55,4 +59,4 @@ for i in range(10):
     print(add(i, i, i))
 
 
-print(power.__doc__)
+# print(power.__doc__)
