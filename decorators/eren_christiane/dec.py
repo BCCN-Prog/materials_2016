@@ -1,21 +1,24 @@
 import functools
 
 
-def deprecated(func):
-    func._seen = False
+def deprecated(str):
+    def deprecated_aux(func):
+        func._seen = False
+        
+        # @functools.wraps(func)
+        def newfunc(*args, **kwargs):
+            if not func._seen:
+                print(func.__name__ + ' is deprecated, use ' + str)
+                func._seen = True
+            return func(*args, **kwargs)
 
-    def newfunc(*args, **kwargs):
-        if not func._seen:
-            print('This function is deprecated')
-            func._seen = True
-        return func(*args, **kwargs)
+        functools.update_wrapper(newfunc, func)
+        return newfunc
 
-    functools.update_wrapper(newfunc, func)
-
-    return newfunc
+    return deprecated_aux
 
 
-@deprecated
+@deprecated('math.pow')
 def power(x, n=1):
     """Return x^n"""
     y = x
@@ -64,6 +67,9 @@ def test_very_special_case():
 
 # test_power()
 # test_add()
-# power(5,5)
+print power(5,5)
 print power.__doc__
 print power.__name__
+# print power(5, 5)
+
+
