@@ -43,8 +43,8 @@ def test_very_special_case():
     out = power(0, n=0)
     assert exp == out
     
-print (power (3,2))
-print (power (3,3))
+#print (power (3,2))
+#print (power (3,3))
 
 
     
