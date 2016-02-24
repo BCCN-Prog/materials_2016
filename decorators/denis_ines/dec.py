@@ -1,10 +1,11 @@
 
-dep_funs = []
+#dep_funs = []
 
 def deprecated(func):
     def newfunc(*args, **kwargs):
         if func not in dep_funs:
-            print('This function is deprecated')
+            print('The following function is deprecated:')
+            print(func)
             dep_funs.append(func)
         return func(*args, **kwargs)
     return newfunc
@@ -43,8 +44,8 @@ def test_very_special_case():
     out = power(0, n=0)
     assert exp == out
     
-#print (power (3,2))
-#print (power (3,3))
+print (power (3,2))
+print (power (3,3))
 
 
     
