@@ -1,16 +1,26 @@
 
 #dep_funs = []
+from functools import update_wrapper
 
-def deprecated(func):
-    def newfunc(*args, **kwargs):
-        if func not in dep_funs:
-            print('The following function is deprecated:')
-            print(func)
-            dep_funs.append(func)
-        return func(*args, **kwargs)
-    return newfunc
+import pdb
 
-@deprecated
+def deprecated(better_f = ' '):
+    def real_dec (func):
+        func._seen = False
+        def new_func(*args, **kwargs):
+            if not func._seen:
+                print('The following function is deprecated:')
+                print(func)
+                if not better_f == ' ':
+                    print('Use ' + better_f + ' instead!')
+                func._seen = True
+                #dep_funs.append(func)
+            return func(*args, **kwargs)
+        update_wrapper(new_func, func)
+        return new_func
+    return real_dec
+
+@deprecated('math.pow')
 def power(x, n=1):
     """Return x^n (for natural numbers only!)"""
     y = x
@@ -44,8 +54,8 @@ def test_very_special_case():
     out = power(0, n=0)
     assert exp == out
     
-print (power (3,2))
-print (power (3,3))
+#print (power (3,2))
+#print (power (3,3))
 
 
     
