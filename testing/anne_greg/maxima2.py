@@ -1,5 +1,7 @@
+# import pdb
 # Advanced Scientific Programming in Python
 # Exercise 3
+import pudb; pu.db
 
 def find_maxima(x):
     """Find local maxima of x.
@@ -21,26 +23,12 @@ def find_maxima(x):
         raise TypeError(message)
 
     idx = []
-    up, down= False, False
-    upidx = -1
-
     for i in range(len(x)):
-        if i == 0 or x[i-1] < x[i]:
-            up = True
-            if upidx<0:
-                upidx = i
+        # pdb.set_trace()  # XXX BREAKPOINT
 
-        if i==(len(x)-1) or x[i] > x[i+1]:
-            down = True
-            upidx = -1
-
-        if up and down:
-            if upidx>=0:
-                idx.append(upidx)
-                upidx = -1
-            else:
-                idx.append(i)
-            up, down = False, False
+        # `i` is a local maximum if the signal decreases before and after it
+        if x[i-1] < x[i] and x[i+1] < x[i]:
+            idx.append(i)
     return idx
 
     # NOTE for the curious: the code above could be written using
