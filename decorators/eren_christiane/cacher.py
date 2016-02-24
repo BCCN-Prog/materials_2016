@@ -25,7 +25,7 @@ def meta_cached(func):
 
 
 def get_code(func):
-    return func.__code__.co_code
+    return func.__code__.co_code + str(func.__code__.co_consts)
 
 
 @meta_cached
@@ -61,7 +61,7 @@ def save_cache():
 
 @cached
 def add(x, y):
-    return x + y + 5
+    return x + y + 3
 
 
 @cached
