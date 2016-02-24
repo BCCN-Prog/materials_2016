@@ -3,6 +3,7 @@ import numpy as np
 import hashlib as hl
 import pickle
 import os
+import atexit
 
 #hl.md5(bal).hashdigest()
 
@@ -38,6 +39,34 @@ def cache(func): # original working version of cache, does not save to disk
             return result
     return newfunc
     
+@atexit.register    
+def saveOnExit():
+    saveToDisk()
+    
+def cache3(func): # cache version 3, saves to disk only on exit, works. Fixed bug where program crashes if cache does not yet exist.
+    func._seen = False
+    def newfunc(*args, **kwargs):
+        n = func.__name__
+        t = (n, args, kwargs)
+        t = pickle.dumps(t)
+        has = hl.md5(t).hexdigest()
+        global pre
+        global results
+        if not func._seen:
+            loadFromDisk()
+            func._seen = True
+        if has in pre:
+            i = pre.index(has)
+            print('cache')
+            return results[i]
+        else: 
+            pre.append(has)
+            result = func(*args, **kwargs)
+            results.append(result)
+            print('no cache')
+            return result
+    return newfunc
+
 def cache2(func): # cache version 2, saves to disk
     def newfunc(*args, **kwargs):
         n = func.__name__
@@ -60,6 +89,7 @@ def cache2(func): # cache version 2, saves to disk
             return result
     return newfunc
 
+
 def saveToDisk():
     f = open('cache', 'wb')
     global pre
@@ -68,12 +98,17 @@ def saveToDisk():
     f.close()
     
 def loadFromDisk():
-    f = open('cache', 'rb+')
+    try:
+        f = open('cache', 'rb+')
+    except IOError:
+        f = open('cache', 'w+')
     global pre
     global results
     try:
         pic = pickle.load(f)
     except EOFError:
+        return
+    except TypeError:
         return
     pre = pic[0]
     results = pic[1]
@@ -123,7 +158,7 @@ def power(x, n = 1):
 def add(x,y,z):
     return x+y+z
 
-@cache2   
+@cache3   
 def addv(x, y,z=1):
     assert type(x) == type(y)
     if type(x) is not np.array:
