@@ -1,14 +1,16 @@
-from functools import wraps
+from functools import update_wrapper
 
-def deprecated(func):
-    func._seen = False
-    @wraps(func)
+def deprecated(func): # this is called only once
+    # thats why setting to false here does not effect the additional function calls
+    func._called = False
     def newfunc(*args, **kwargs):
-        if not func._seen:
+        if not func._called:
+            func._called = True
             print('This function is deprecated')
-            func._seen = True
         return func(*args, **kwargs)
-    return newfunc
+    # uses doc, name, and signature of original function see
+    # documentation of update_wrapper
+    return update_wrapper(newfunc, func)
 
 @deprecated
 def power(x, n=1):
@@ -43,9 +45,3 @@ def test_very_special_case():
     exp = 1
     out = power(0, n=0)
     assert exp == out
-    
-#print (power (3,2))
-#print (power (3,3))
-
-
-    
