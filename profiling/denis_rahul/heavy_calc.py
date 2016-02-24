@@ -1,9 +1,8 @@
 def f(x):
-    long = range(10**x)
+    long_ = range(10**x)
     y = []
-    for idx in long:
-        #y.extend([idx*2])
-        y = [idx]
+    for idx in long_:
+        y.extend([idx*2])
     return y
 
 def g(y):
@@ -12,6 +11,6 @@ def g(y):
         z.append(idx/2)
     return z
 
-pow = 7
+power = 7
 
-a = g(pow)
+a = g(power)
