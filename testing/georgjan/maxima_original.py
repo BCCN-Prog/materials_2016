@@ -25,6 +25,7 @@ def find_maxima(x):
     upidx = -1
 
     for i in range(len(x)):
+ 
         if i == 0 or x[i-1] < x[i]:
             up = True
             if upidx<0:

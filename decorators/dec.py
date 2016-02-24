@@ -1,10 +1,18 @@
-def deprecated(func):
-    def newfunc(*args, **kwargs):
-        print('This function is deprecated')
-        return func(*args, **kwargs)
-    return newfunc
+import functools
 
-@deprecated
+def deprecate(func, instead):
+    func._seen = False
+    def newfunc(*args, **kwargs):
+        if not func._seen:
+            print('This function is deprecated. Use %s instead!'%instead)
+            func._seen = True
+        return func(*args, **kwargs)
+    return functools.update_wrapper(newfunc, func)
+
+def deprecated(instead='None'):
+    return functools.partial(deprecate, instead=instead)
+
+@deprecated()
 def power(x, n=1):
     """Return x^n (for natural numbers only!)"""
     y = x
@@ -14,7 +22,7 @@ def power(x, n=1):
         y = y*x
     return y
 
-@deprecated
+@deprecated('+')
 def add(x, y, z):
     return x + y + z
 

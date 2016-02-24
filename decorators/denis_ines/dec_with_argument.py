@@ -1,14 +1,23 @@
 from functools import wraps
 
 class deprecated(object):
-    def __init__(self, use):
-        self.use = use
-        self._seen = False
-    def __call__(self, func):
-        @wraps(func)
+    def __init__(self, *args):
+        assert len(args)<=1, 'Too many arguments in deprecated decorator!'
+        if callable(args[0]):
+            self.use = None
+            self.func = args[0]
+        else:
+            self.use = args[0]
+            self.func = args[1]
+        self._seen = True
+    def __call__(self):
+        @wraps(self.func)
         def newfunc(*args, **kwargs):
-            if not self._seen:
+            if not self._seen and self.use:
                 print('This function is deprecated! Use {} instead.'.format(self.use))
+                self._seen = True
+            elif not self._seen:
+                print('This function is deprecated!')
                 self._seen = True
             return func(*args, **kwargs)
         return newfunc
@@ -23,7 +32,7 @@ def power(x, n=1):
         y = y*x
     return y
 
-@deprecated('+')
+@deprecated
 def add(x, y, z):
     return x + y + z
 
