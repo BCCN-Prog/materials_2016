@@ -38,5 +38,6 @@ def test_back_to_the_future():
     fh = open(FNAME, 'rb')
     b = pickle.load(fh)
     fh.close()
-    assert a.attr == b.attr
+    assert a.number == b.attr
+    assert a.number == b.number
 
